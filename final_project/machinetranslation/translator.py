@@ -1,7 +1,10 @@
+'''
+Module to translate text from Englist to French and vis-versa
+'''
+import os
 import json
 from ibm_watson import LanguageTranslatorV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,20 +20,27 @@ language_translator = LanguageTranslatorV3(
 
 language_translator.set_service_url(url)
 
-def englishToFrench(englishText):
-    frenchText = language_translator.translate(
-        text=englishText,
+def english_to_french(english_text):
+    '''
+    Translate english to french function
+    '''
+
+    json_txt = language_translator.translate(
+        text=english_text,
         model_id='en-fr').get_result()
-    
-    return json.dumps(frenchText, indent=2, ensure_ascii=False)
+    french_text = json_txt['translations'][0]['translation']
 
-#print(englishToFrench("Don't speak loudly!"))
+    return french_text
 
-def frenchToEnglish(frenchText):
-    englishText = language_translator.translate(
-        text=frenchText,
+
+def french_to_english(french_text):
+    '''
+    Translate french to english function
+    '''
+
+    json_txt = language_translator.translate(
+        text=french_text,
         model_id='fr-en').get_result()
-    
-    return json.dumps(englishText, indent=2, ensure_ascii=False)
+    english_text = json_txt['translations'][0]['translation']
 
-#print(frenchToEnglish("Bonjour, bienvenue ici!"))
+    return english_text
